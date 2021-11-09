@@ -8,7 +8,7 @@ const getCards = (req, res) => {
       throw error;
     })
     .then((cards) => res.status(200).send({ cards }))
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
@@ -23,7 +23,7 @@ const deleteCard = (req, res) => {
     .then((card) => {
       res.status(200).send({ card });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
@@ -50,7 +50,7 @@ const likeCard = (req, res) => {
     .then((like) => {
       res.status(200).send({ likes: like });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
@@ -60,7 +60,7 @@ const dislikeCard = (req, res) => {
     .then((dislike) => {
       res.status(200).send({ likes: dislike });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };

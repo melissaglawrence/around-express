@@ -8,9 +8,9 @@ const getUsersInfo = (req, res) => {
       throw error;
     })
     .then((users) => res.status(200).send({ users }))
-    .catch((err) =>
-      res.status(500).send({ message: 'An error has occurred on the server' })
-    );
+    .catch(() => {
+      res.status(500).send({ message: 'An error has occurred on the server' });
+    });
 };
 
 const getUsersId = (req, res) => {
@@ -26,7 +26,7 @@ const getUsersId = (req, res) => {
       }
       return res.status(400).send({ message: 'User ID not found' });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
