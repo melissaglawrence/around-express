@@ -9,14 +9,14 @@ const getCards = (req, res) => {
     })
     .then((cards) => res.status(200).send({ cards }))
     .catch((err) => {
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
 const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.id)
     .orFail(() => {
-      const error = new Error('No cards found');
+      const error = new Error('No card found');
       error.statusCode = 404;
       throw error;
     })
@@ -24,24 +24,24 @@ const deleteCard = (req, res) => {
       res.status(200).send({ card });
     })
     .catch((err) => {
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
 const createCard = (req, res) => {
-  console.log(req.user._id);
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
       res.status(200).send({ data: card });
     })
     .catch((err) => {
+      const ERROR__CODE = 400;
       if (err.name === 'ValidationError') {
-        throw res.status(400).send({
+        throw res.status(ERROR__CODE).send({
           message: `${err.message} `,
         });
       }
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
@@ -51,7 +51,7 @@ const likeCard = (req, res) => {
       res.status(200).send({ likes: like });
     })
     .catch((err) => {
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
@@ -61,7 +61,7 @@ const dislikeCard = (req, res) => {
       res.status(200).send({ likes: dislike });
     })
     .catch((err) => {
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 module.exports = {

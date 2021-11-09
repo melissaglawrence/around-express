@@ -8,7 +8,9 @@ const getUsersInfo = (req, res) => {
       throw error;
     })
     .then((users) => res.status(200).send({ users }))
-    .catch((err) => res.status(500).send({ message: `${err.message}` }));
+    .catch((err) =>
+      res.status(500).send({ message: 'An error has occurred on the server' })
+    );
 };
 
 const getUsersId = (req, res) => {
@@ -25,7 +27,7 @@ const getUsersId = (req, res) => {
       return res.status(400).send({ message: 'User ID not found' });
     })
     .catch((err) => {
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
@@ -36,12 +38,13 @@ const createUser = (req, res) => {
       res.status(200).send({ data: user });
     })
     .catch((err) => {
+      const ERROR__CODE = 400;
       if (err.name === 'ValidationError') {
-        throw res.status(400).send({
+        throw res.status(ERROR__CODE).send({
           message: `${err.message} `,
         });
       }
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
@@ -55,12 +58,13 @@ const updateUser = (req, res) => {
   })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
+      const ERROR__CODE = 400;
       if (err.name === 'ValidationError') {
-        throw res.status(400).send({
+        throw res.status(ERROR__CODE).send({
           message: `${err.message} `,
         });
       }
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
@@ -73,12 +77,13 @@ const updateUserAvatar = (req, res) => {
   })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
+      const ERROR__CODE = 400;
       if (err.name === 'ValidationError') {
-        throw res.status(400).send({
+        throw res.status(ERROR__CODE).send({
           message: `${err.message} `,
         });
       }
-      res.status(500).send({ message: `${err.message}` });
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
