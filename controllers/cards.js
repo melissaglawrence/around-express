@@ -8,7 +8,10 @@ const getCards = (req, res) => {
       throw error;
     })
     .then((cards) => res.status(200).send({ cards }))
-    .catch(() => {
+    .catch((err) => {
+      if (err.message === 'No cards found') {
+        res.status(404).send({ message: 'No cards found' });
+      }
       res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
@@ -23,8 +26,13 @@ const deleteCard = (req, res) => {
     .then((card) => {
       res.status(200).send({ card });
     })
-    .catch(() => {
-      res.status(500).send({ message: 'An error has occurred on the server' });
+    .catch((err) => {
+      if (err.message === 'No card found') {
+        res.status(404).send({ message: 'No card found' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'No card with that id' });
+      }
+      return res.status(500).send({ message: err.message });
     });
 };
 
@@ -47,21 +55,41 @@ const createCard = (req, res) => {
 
 const likeCard = (req, res) => {
   Card.findByIdAndUpdate(req.params.id, { $addToSet: { likes: req.user._id } })
+    .orFail(() => {
+      const error = new Error('No card found');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((like) => {
       res.status(200).send({ likes: like });
     })
-    .catch(() => {
-      res.status(500).send({ message: 'An error has occurred on the server' });
+    .catch((err) => {
+      if (err.message === 'No card found') {
+        res.status(404).send({ message: 'No card found' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'No card with that id' });
+      }
+      return res.status(500).send({ message: err.message });
     });
 };
 
 const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(req.params.id, { $pull: { likes: req.user._id } })
+    .orFail(() => {
+      const error = new Error('No card found');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((dislike) => {
       res.status(200).send({ likes: dislike });
     })
-    .catch(() => {
-      res.status(500).send({ message: 'An error has occurred on the server' });
+    .catch((err) => {
+      if (err.message === 'No card found') {
+        res.status(404).send({ message: 'No card found' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'No card with that id' });
+      }
+      return res.status(500).send({ message: err.message });
     });
 };
 module.exports = {
